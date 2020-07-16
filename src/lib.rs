@@ -66,8 +66,8 @@ pub struct SearchResult {
     pub track_explicitness: Option<Explicitness>,
     #[serde(rename = "trackCount")]
     pub track_count: Option<usize>,
-    pub country: Option<Country>,
-    pub currency: Option<Currency>,
+    pub country: Option<celes::Country>,
+    pub currency: Option<iso_currency::Currency>,
     #[serde(rename = "primaryGenreName")]
     pub primary_genre_name: Option<String>,
     #[serde(rename = "contentAdvisoryRating")]
@@ -78,7 +78,7 @@ pub struct SearchResult {
     pub genre_ids: Option<Vec<String>>,
     pub genres: Option<Vec<String>>,
 }
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub enum Explicitness {
     #[serde(rename = "cleaned")]
     Cleaned,
@@ -88,34 +88,26 @@ pub enum Explicitness {
     NotExplicit,
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub enum ContentAdvisoryRating {
     Clean,
     Explicit,
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub enum Country {
-    #[serde(rename = "USA")]
-    USA,
-}
-
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub enum Currency {
-    #[serde(rename = "USD")]
-    USD,
-}
-
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub enum Kind {
     #[serde(rename = "podcast")]
     Podcast,
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub enum WrapperType {
     #[serde(rename = "track")]
     Track,
+    #[serde(rename = "collection")]
+    Collection,
+    #[serde(rename = "artist")]
+    Artist,
 }
 
 #[derive(Error, Debug)]
