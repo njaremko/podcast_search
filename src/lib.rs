@@ -4,14 +4,14 @@ extern crate serde;
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use thiserror::Error;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SearchResponse {
     #[serde(rename = "resultCount")]
     pub result_count: usize,
     pub results: Vec<SearchResult>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SearchResult {
     #[serde(rename = "wrapperType")]
     pub wrapper_type: Option<WrapperType>,
@@ -78,8 +78,7 @@ pub struct SearchResult {
     pub genre_ids: Option<Vec<String>>,
     pub genres: Option<Vec<String>>,
 }
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum Explicitness {
     #[serde(rename = "cleaned")]
     Cleaned,
@@ -89,31 +88,31 @@ pub enum Explicitness {
     NotExplicit,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum ContentAdvisoryRating {
     Clean,
     Explicit,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum Country {
     #[serde(rename = "USA")]
     USA,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum Currency {
     #[serde(rename = "USD")]
     USD,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum Kind {
     #[serde(rename = "podcast")]
     Podcast,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum WrapperType {
     #[serde(rename = "track")]
     Track,
