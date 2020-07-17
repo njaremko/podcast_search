@@ -66,7 +66,8 @@ pub struct SearchResult {
     pub track_explicitness: Option<Explicitness>,
     #[serde(rename = "trackCount")]
     pub track_count: Option<usize>,
-    pub country: Option<celes::Country>,
+    #[serde(with = "serde_with::rust::display_fromstr")]
+    pub country: celes::Country,
     pub currency: Option<iso_currency::Currency>,
     #[serde(rename = "primaryGenreName")]
     pub primary_genre_name: Option<String>,
