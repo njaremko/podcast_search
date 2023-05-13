@@ -2,6 +2,8 @@
 extern crate serde;
 
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
+use serde_with::serde_as;
+use serde_with::DisplayFromStr;
 use thiserror::Error;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -11,6 +13,7 @@ pub struct SearchResponse {
     pub results: Vec<SearchResult>,
 }
 
+#[serde_as]
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SearchResult {
     #[serde(rename = "wrapperType")]
@@ -66,7 +69,7 @@ pub struct SearchResult {
     pub track_explicitness: Option<Explicitness>,
     #[serde(rename = "trackCount")]
     pub track_count: Option<usize>,
-    #[serde(with = "serde_with::rust::display_fromstr")]
+    #[serde_as(as = "DisplayFromStr")]
     pub country: celes::Country,
     pub currency: Option<iso_currency::Currency>,
     #[serde(rename = "primaryGenreName")]
@@ -114,14 +117,14 @@ pub enum WrapperType {
 #[derive(Error, Debug)]
 pub enum PodcastSearchError {
     #[error("Failed to fetch information for itunes API {source:?}")]
-    FetchError{
+    FetchError {
         #[from]
-        source: reqwest::Error
+        source: reqwest::Error,
     },
     #[error("Failed to parse response from itunes API {source:?}")]
     ParseError {
         #[from]
-        source: serde_json::Error
+        source: serde_json::Error,
     },
     #[error("An unknown error occurred!")]
     Unknown,
@@ -129,7 +132,10 @@ pub enum PodcastSearchError {
 
 pub async fn search(terms: &str) -> Result<SearchResponse, PodcastSearchError> {
     let encoded: String = utf8_percent_encode(terms, NON_ALPHANUMERIC).to_string();
-    let url =  format!("https://itunes.apple.com/search?media=podcast&entity=podcast&term={}", encoded);
+    let url = format!(
+        "https://itunes.apple.com/search?media=podcast&entity=podcast&term={}",
+        encoded
+    );
     let resp = reqwest::get(&url).await?.json::<SearchResponse>().await?;
     Ok(resp)
 }
